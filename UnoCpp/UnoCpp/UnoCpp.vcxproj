@@ -127,7 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoardController.cpp" />
+    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="CardCollection.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="UnoCpp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BoardController.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="CardCollection.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
