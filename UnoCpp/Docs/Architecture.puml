@@ -1,0 +1,100 @@
+@startuml
+
+class GameManager
+{
+    std::vector<Player> Players
+    BoardController Board
+    
+    void ShufflePlayers()
+    void StartGame()
+    void StartPlayerTurn()
+}
+GameManager-->Player
+GameManager-->BoardController
+
+class Player
+{
+    string Name
+    CardCollection Cards
+    
+    void PlayTurn()
+    void Print()
+}
+Player-->CardCollection
+Player-->BoardController
+
+class BoardController
+{
+    CardCollection Deck
+    CardCollection DiscardPile
+    
+    void DistributeCards()
+    void Print(std::vector<Player>)
+    bool CheckValidMove(Card)
+    void ResetDeck()
+}
+BoardController-->Player
+BoardController-->CardCollection
+
+class CardCollection
+{
+    std::vector<Card> Cards
+    
+    void AddCard()
+    void RemoveCard()
+}
+CardCollection-->Card
+
+abstract class Card
+{
+    Color
+
+    void Action()
+    void Print()
+}
+
+class NumberCard extends Card
+{
+    Number
+}
+
+class ForceBuyCard extends Card
+{
+    Amount
+}
+
+class AReverseCard extends Card
+
+class JumpCard extends Card
+
+'https://plantuml.com/class-diagram
+'
+'abstract class AbstractList
+'abstract AbstractCollection
+'interface List
+'interface Collection
+'
+'List <|-- AbstractList
+'Collection <|-- AbstractCollection
+'
+'Collection <|----- List
+'AbstractCollection <|- AbstractList
+'AbstractList <|-- ArrayList
+'
+'class ArrayList {
+'Object[] elementData
+'size()
+'}
+'
+'enum TimeUnit {
+'DAYS
+'HOURS
+'MINUTES
+'}
+
+'class Parent
+'class Child
+'interface Interface
+'Parent<|--Child
+'Interface<|..Child
+@enduml
