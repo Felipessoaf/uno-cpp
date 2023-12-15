@@ -130,16 +130,26 @@
     <ClCompile Include="BoardController.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardCollection.cpp" />
+    <ClCompile Include="ColorType.cpp" />
+    <ClCompile Include="ForceBuyCard.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="JumpCard.cpp" />
+    <ClCompile Include="NumberCard.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ReverseCard.cpp" />
     <ClCompile Include="UnoCpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardController.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardCollection.h" />
+    <ClInclude Include="ColorType.h" />
+    <ClInclude Include="ForceBuyCard.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="JumpCard.h" />
+    <ClInclude Include="NumberCard.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="ReverseCard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
