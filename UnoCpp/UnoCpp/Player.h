@@ -1,14 +1,13 @@
 #pragma once
-#include <memory>
 #include <string>
 
-class CardCollection;
+#include "CardCollection.h"
 
 class Player
 {
 public:
     std::string Name;
-    std::shared_ptr<CardCollection> Cards;
+    CardCollection Cards;
 
     void PlayTurn();
     void Print();

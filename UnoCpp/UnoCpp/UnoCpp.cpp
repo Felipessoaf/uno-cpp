@@ -5,5 +5,6 @@
 int main()
 {
 	GameManager gameManager{};
+	gameManager.Setup();
 	return 0;
 }

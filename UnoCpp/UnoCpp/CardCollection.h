@@ -7,8 +7,8 @@ class Card;
 class CardCollection
 {
 public:
-    std::shared_ptr<std::vector<std::shared_ptr<Card>>> Cards;
+    std::vector<std::shared_ptr<Card>> Cards{};
 
-    void AddCard();
+    void AddCard(const std::shared_ptr<Card>& card);
     void RemoveCard();
 };
