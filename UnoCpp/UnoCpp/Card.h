@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 #include "ColorType.h"
 
@@ -16,7 +17,8 @@ public:
     virtual void Action() = 0;
 
     void Print() const;
-    static std::string PrintCardLine(const std::string& textInMiddle, const std::string& symbol, int lineSize);
+    std::vector<std::string> GetPrintableCard() const;
+    std::string GetPrintableLine(const std::string& textInMiddle, const std::string& symbol, int lineSize) const;
 
 private:
     virtual std::string GetName() const = 0;

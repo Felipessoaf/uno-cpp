@@ -33,11 +33,24 @@ void BoardController::CreateCards()
     CreateEffectCards(Green);
 
 #ifdef _DEBUG
+    std::vector<std::string> lines{};
+    const std::string cardPadding = "      ";
     for (const std::shared_ptr<Card>& card : Deck->Cards)
     {
-        card->Print();
-        Logger::LogMessage("\n");
+        std::vector<std::string> printableCard = card->GetPrintableCard();
+        for (size_t i = 0; i < printableCard.size(); ++i)
+        {
+            if (lines.size() <= i)
+            {
+                lines.emplace_back(printableCard[i] + cardPadding);
+            }
+            else
+            {
+                lines[i].append(printableCard[i] + cardPadding);
+            }
+        }
     }
+    Logger::LogMessage(lines);
     Logger::LogMessage("End Cards");
 #endif
 }

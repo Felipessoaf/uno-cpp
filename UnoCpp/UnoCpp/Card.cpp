@@ -1,24 +1,30 @@
 #include "Card.h"
 
+#include <vector>
+
 #include "Logger.h"
 
 void Card::Print() const
 {
-    std::string card{};
-    card += GetColorId(Color);
-    card += "|==========|\n";
-    card += PrintCardLine("", "|", 10);
-    card += PrintCardLine(GetName(), "|", 10);
-    card += PrintCardLine(ColorToString(Color), "|", 10);
-    card += PrintCardLine("", "|", 10);
-    card += "|==========|\n";
-    card += GetColorId(None);
-    Logger::LogMessage(card);
+    Logger::LogMessage(GetPrintableCard());
 }
 
-std::string Card::PrintCardLine(const std::string& textInMiddle, const std::string& symbol, const int lineSize)
+std::vector<std::string> Card::GetPrintableCard() const
 {
-    std::string line{};
+    std::vector<std::string> card{};
+    card.emplace_back(GetColorId(Color) + "|==========|");
+    card.emplace_back(GetPrintableLine("", "|", 10));    
+    card.emplace_back(GetPrintableLine(GetName(), "|", 10));
+    card.emplace_back(GetPrintableLine(ColorToString(Color), "|", 10));
+    card.emplace_back(GetPrintableLine("", "|", 10));
+    card.emplace_back(GetColorId(Color) + "|==========|");
+    card.emplace_back(GetColorId(None));
+    return card;
+}
+
+std::string Card::GetPrintableLine(const std::string& textInMiddle, const std::string& symbol, const int lineSize) const
+{
+    std::string line{GetColorId(Color)};
     const size_t leftPadding = (lineSize - textInMiddle.length()) / 2;
     line += symbol;
     for (size_t i = 0; i < leftPadding; i++)
@@ -32,7 +38,6 @@ std::string Card::PrintCardLine(const std::string& textInMiddle, const std::stri
         line += " ";
     }
     line += symbol;
-    line += "\n";
     return line;
 }
 
