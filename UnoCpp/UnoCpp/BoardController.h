@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 
+#include "ColorType.h"
 #include "Player.h"
 
 class Card;
@@ -10,11 +11,17 @@ class CardCollection;
 class BoardController
 {
 public:
-    std::shared_ptr<CardCollection> Deck;
-    std::shared_ptr<CardCollection> DiscardPile;
+    void Setup(std::shared_ptr<std::vector<Player>> players);
 
-    void DistributeCards();
+private:
+    void CreateCards();
+    void CreateNumberCard(int number, ColorType color, int amount) const;
+    void CreateEffectCards(ColorType color) const;
+    void DistributeCards(std::shared_ptr<std::vector<Player>> players);
     void Print(std::shared_ptr<std::vector<Player>> players);
     void CheckValidMove(std::shared_ptr<Card> card);
     void ResetDeck();
+    
+    std::shared_ptr<CardCollection> Deck;
+    std::shared_ptr<CardCollection> DiscardPile;
 };
