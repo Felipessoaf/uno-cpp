@@ -9,10 +9,11 @@ class GameManager
 {
 public:
     void Setup();
-    
+    void CreatePlayers();
+
 private:
-    void ShufflePlayers();
-    void StartGame();
+    void StartGame() const;
+    void ShufflePlayers() const;
     void StartPlayerTurn();
     
     std::shared_ptr<std::vector<Player>> Players;

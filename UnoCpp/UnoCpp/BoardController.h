@@ -11,13 +11,13 @@ class CardCollection;
 class BoardController
 {
 public:
-    void Setup(std::shared_ptr<std::vector<Player>> players);
+    void Setup(const std::shared_ptr<std::vector<Player>>& players);
 
 private:
     void CreateCards();
     void CreateNumberCard(int number, ColorType color, int amount) const;
     void CreateEffectCards(ColorType color) const;
-    void DistributeCards(std::shared_ptr<std::vector<Player>> players);
+    void DistributeCards(const std::shared_ptr<std::vector<Player>>& players) const;
     void Print(std::shared_ptr<std::vector<Player>> players);
     void CheckValidMove(std::shared_ptr<Card> card);
     void ResetDeck();

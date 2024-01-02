@@ -6,11 +6,11 @@
 #include "CardCollection.h"
 #include "ForceBuyCard.h"
 #include "JumpCard.h"
-#include "Logger.h"
+#include "ConsoleIO.h"
 #include "NumberCard.h"
 #include "ReverseCard.h"
 
-void BoardController::Setup(std::shared_ptr<std::vector<Player>> players)
+void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players)
 {
     CreateCards();
     DistributeCards(players);
@@ -32,27 +32,27 @@ void BoardController::CreateCards()
     CreateEffectCards(Yellow);
     CreateEffectCards(Green);
 
-#ifdef _DEBUG
-    std::vector<std::string> lines{};
-    const std::string cardPadding = "      ";
-    for (const std::shared_ptr<Card>& card : Deck->Cards)
-    {
-        std::vector<std::string> printableCard = card->GetPrintableCard();
-        for (size_t i = 0; i < printableCard.size(); ++i)
-        {
-            if (lines.size() <= i)
-            {
-                lines.emplace_back(printableCard[i] + cardPadding);
-            }
-            else
-            {
-                lines[i].append(printableCard[i] + cardPadding);
-            }
-        }
-    }
-    Logger::LogMessage(lines);
-    Logger::LogMessage("End Cards");
-#endif
+// #ifdef _DEBUG
+//     std::vector<std::string> lines{};
+//     const std::string cardPadding = "      ";
+//     for (const std::shared_ptr<Card>& card : Deck->Cards)
+//     {
+//         std::vector<std::string> printableCard = card->GetPrintableCard();
+//         for (size_t i = 0; i < printableCard.size(); ++i)
+//         {
+//             if (lines.size() <= i)
+//             {
+//                 lines.emplace_back(printableCard[i] + cardPadding);
+//             }
+//             else
+//             {
+//                 lines[i].append(printableCard[i] + cardPadding);
+//             }
+//         }
+//     }
+//     ConsoleIO::LogMessage(lines);
+//     ConsoleIO::LogMessage("End Cards");
+// #endif
 }
 
 void BoardController::CreateNumberCard(int number, ColorType color, const int amount) const
@@ -74,8 +74,12 @@ void BoardController::CreateEffectCards(ColorType color) const
     }
 }
 
-void BoardController::DistributeCards(std::shared_ptr<std::vector<Player>> players)
+void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>& players) const
 {
+    for (Player& player : *players)
+    {
+        player.Cards.AddCard(Deck->RemoveCard());
+    }
 }
 
 void BoardController::Print(std::shared_ptr<std::vector<Player>> players)

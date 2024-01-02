@@ -6,6 +6,8 @@
 class Player
 {
 public:
+    Player(std::string name);
+    
     std::string Name;
     CardCollection Cards;
 
