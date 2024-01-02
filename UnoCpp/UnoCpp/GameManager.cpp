@@ -18,20 +18,20 @@ void GameManager::Setup()
 
     StartGame();
     
-#ifdef _DEBUG
-    ConsoleIO::LogMessage("Init Players\n");
-    for (const Player& player : *Players)
-    {
-        ConsoleIO::LogMessage(player.Name + "\n");
-    }
-    ConsoleIO::LogMessage("End Players");
-#endif
+// #ifdef _DEBUG
+//     ConsoleIO::LogMessage("Init Players\n");
+//     for (const Player& player : *Players)
+//     {
+//         ConsoleIO::LogMessage(player.Name + "\n");
+//     }
+//     ConsoleIO::LogMessage("End Players");
+// #endif
 }
 
 void GameManager::CreatePlayers()
 {
-    const int numPlayers = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
-    if (numPlayers < 2 || numPlayers > 10)
+    playerAmount = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
+    if (playerAmount < 2 || playerAmount > 10)
     {
         ConsoleIO::LogMessage("Invalid number of players\n");
         CreatePlayers();
@@ -39,26 +39,40 @@ void GameManager::CreatePlayers()
     }
 
     Players = std::make_shared<std::vector<Player>>();
-    for (int i = 0; i < numPlayers; ++i)
+    for (int i = 0; i < playerAmount; ++i)
     {
         auto playerName = ConsoleIO::GetInput<std::string>("Enter player " + std::to_string(i) + " name: \n");
-        Players->emplace_back(Player{std::move(playerName)});   
+        Players->emplace_back(Player{std::move(playerName)});
     }
 }
 
-void GameManager::StartGame() const
+void GameManager::StartGame()
 {
     ShufflePlayers();
+    Board->FlipCard();
+    StartCurrentPlayerTurn();
 }
 
-void GameManager::ShufflePlayers() const
+void GameManager::ShufflePlayers()
 {
     const unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
     auto rng = std::default_random_engine {seed};
     std::ranges::shuffle(*Players, rng);
 }
 
-void GameManager::StartPlayerTurn()
+void GameManager::StartCurrentPlayerTurn()
 {
-    // Players
+    system("cls");
+    Players->at(currentPlayer).Print();
+    Players->at(currentPlayer).PlayTurn();
+    SetNextPlayer();
+}
+
+void GameManager::SetNextPlayer()
+{
+    currentPlayer++;
+    if(currentPlayer >= playerAmount)
+    {
+        currentPlayer = 0;
+    }
 }

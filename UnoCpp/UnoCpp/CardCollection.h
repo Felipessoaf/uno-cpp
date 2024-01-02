@@ -11,4 +11,6 @@ class CardCollection
 public:
     void AddCard(const std::shared_ptr<Card>& card);
     std::shared_ptr<Card> RemoveCard();
+    void Print();
+    bool IsEmpty() const;
 };

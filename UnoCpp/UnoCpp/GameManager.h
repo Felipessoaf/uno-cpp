@@ -12,10 +12,14 @@ public:
     void CreatePlayers();
 
 private:
-    void StartGame() const;
-    void ShufflePlayers() const;
-    void StartPlayerTurn();
+    void StartGame();
+    void ShufflePlayers();
+    void StartCurrentPlayerTurn();
+    void SetNextPlayer();
     
     std::shared_ptr<std::vector<Player>> Players;
     std::shared_ptr<BoardController> Board;
+
+    int currentPlayer = 0;
+    int playerAmount = -1;
 };

@@ -10,11 +10,11 @@ public:
     static void LogMessage(const std::vector<std::string>& lines);
     
     template<typename T>
-    static T GetInput(const std::string& msg);
+    static T GetInput(std::string_view msg);
 };
 
 template <typename T>
-T ConsoleIO::GetInput(const std::string& msg)
+T ConsoleIO::GetInput(std::string_view msg)
 {
     T input{};
     std::cout << msg;
