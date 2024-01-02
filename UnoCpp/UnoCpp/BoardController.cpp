@@ -41,6 +41,18 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card)
     {
         return false;
     }
+
+    std::shared_ptr<Card> cardToCheck = card.lock();
+    std::shared_ptr<Card> cardAtTop = DiscardPile->GetAtTop().lock();
+    if (cardToCheck->Color == cardAtTop->Color)
+    {
+        return true;
+    }
+
+    // if()
+    // {
+    //     
+    // }
     
     return true;
 }

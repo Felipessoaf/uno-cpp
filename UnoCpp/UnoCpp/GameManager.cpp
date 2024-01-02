@@ -30,13 +30,11 @@ void GameManager::Setup()
 
 void GameManager::CreatePlayers()
 {
-    playerAmount = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
-    if (playerAmount < 2 || playerAmount > 10)
+    do
     {
-        ConsoleIO::LogMessage("Invalid number of players\n");
-        CreatePlayers();
-        return;        
+        playerAmount = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
     }
+    while (playerAmount < 2 || playerAmount > 10);
 
     Players = std::make_shared<std::vector<Player>>();
     for (int i = 0; i < playerAmount; ++i)

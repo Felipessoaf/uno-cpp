@@ -20,6 +20,6 @@ private:
     std::shared_ptr<std::vector<Player>> Players;
     std::shared_ptr<BoardController> Board;
 
-    int currentPlayer = 0;
-    int playerAmount = -1;
+    int currentPlayer {0};
+    int playerAmount {-1};
 };

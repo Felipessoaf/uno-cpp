@@ -13,22 +13,15 @@ Player::Player(std::string name, std::shared_ptr<BoardController> board)
 void Player::PlayTurn()
 {
     // TODO: if there's only 2 cards left, show the option to yell "UNO!"
-    
-    int cardIndex = ConsoleIO::GetInput<int>("Choose a card to play (starting at index 0)");
-    std::weak_ptr<Card> card = Cards.GetAt(cardIndex);
-    if (card.expired())
+
+    std::weak_ptr<Card> card{};
+    int cardIndex;
+    do
     {
-        ConsoleIO::LogMessage("Invalid card index\n");
-        PlayTurn();
-        return;
+        cardIndex = ConsoleIO::GetInput<int>("Choose a valid card to play (starting at index 0):\n");
+        card = Cards.GetAt(cardIndex);
     }
-    
-    if (!boardController->IsValidMove(card))
-    {
-        ConsoleIO::LogMessage("Invalid move\n");
-        PlayTurn();
-        return;
-    }
+    while (card.expired() && !boardController->IsValidMove(card));
 
     boardController->PlayCard(Cards.RemoveAt(cardIndex));
 }
