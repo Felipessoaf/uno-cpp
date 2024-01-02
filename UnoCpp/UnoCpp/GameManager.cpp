@@ -42,7 +42,7 @@ void GameManager::CreatePlayers()
     for (int i = 0; i < playerAmount; ++i)
     {
         auto playerName = ConsoleIO::GetInput<std::string>("Enter player " + std::to_string(i) + " name: \n");
-        Players->emplace_back(Player{std::move(playerName)});
+        Players->emplace_back(Player{std::move(playerName), Board});
     }
 }
 
@@ -64,6 +64,8 @@ void GameManager::StartCurrentPlayerTurn()
 {
     system("cls");
     Players->at(currentPlayer).Print();
+    ConsoleIO::LogMessage("Pile card:\n");
+    Board->PrintDiscardTop();
     Players->at(currentPlayer).PlayTurn();
     SetNextPlayer();
 }

@@ -13,8 +13,9 @@ class BoardController
 public:
     void Setup(const std::shared_ptr<std::vector<Player>>& players);
     void FlipCard();
-    void PrintDiscardTop();
-    void CheckValidMove(std::shared_ptr<Card> card);
+    void PrintDiscardTop() const;
+    bool IsValidMove(const std::weak_ptr<Card>& card);
+    void PlayCard(const std::shared_ptr<Card>& card);
 
 private:
     void CreateCards();

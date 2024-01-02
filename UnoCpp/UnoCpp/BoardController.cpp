@@ -23,15 +23,29 @@ void BoardController::FlipCard()
     {
         ResetDeck();
     }
-    DiscardPile->AddCard(Deck->RemoveCard());
+    DiscardPile->AddCard(Deck->RemoveAt(0));
 }
 
-void BoardController::PrintDiscardTop()
+void BoardController::PrintDiscardTop() const
 {
-    // DiscardPile.
+    if (const std::weak_ptr<Card> tableCard = DiscardPile->GetAtTop(); !tableCard.expired())
+    {
+        const std::shared_ptr<Card> card = tableCard.lock();
+        card->Print();
+    }
 }
 
-void BoardController::CheckValidMove(std::shared_ptr<Card> card)
+bool BoardController::IsValidMove(const std::weak_ptr<Card>& card)
+{
+    if (card.expired())
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
 }
 
@@ -78,7 +92,7 @@ void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>
     {
         for (Player& player : *players)
         {
-            player.Cards.AddCard(Deck->RemoveCard());
+            player.Cards.AddCard(Deck->RemoveAt(0));
         }
     }
 }

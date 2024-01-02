@@ -10,14 +10,34 @@ void CardCollection::AddCard(const std::shared_ptr<Card>& card)
     Cards.emplace_back(card);
 }
 
-std::shared_ptr<Card> CardCollection::RemoveCard()
+std::shared_ptr<Card> CardCollection::RemoveAt(const uint32_t index)
 {
-    std::shared_ptr<Card> card = Cards.at(Cards.size() - 1);
-    Cards.pop_back();
+    if (index < 0 || index >= Cards.size())
+    {
+        return {};
+    }
+    
+    std::shared_ptr<Card> card = Cards.at(index);
+    Cards.erase(Cards.begin() + index);
     return card;
 }
 
-void CardCollection::Print()
+std::weak_ptr<Card> CardCollection::GetAtTop() const
+{
+    return Cards.at(Cards.size() - 1);
+}
+
+std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
+{
+    if (index < 0 || index >= Cards.size())
+    {
+        return {};
+    }
+
+    return Cards.at(index);
+}
+
+void CardCollection::Print() const
 {
     std::vector<std::string> lines{};
     const std::string cardPadding = "      ";
