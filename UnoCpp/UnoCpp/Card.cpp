@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "Logger.h"
+#include "ConsoleIO.h"
 
 void Card::Print() const
 {
-    Logger::LogMessage(GetPrintableCard());
+    ConsoleIO::LogMessage(GetPrintableCard());
 }
 
 std::vector<std::string> Card::GetPrintableCard() const

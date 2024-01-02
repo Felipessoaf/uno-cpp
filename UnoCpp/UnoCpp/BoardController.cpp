@@ -6,19 +6,53 @@
 #include "CardCollection.h"
 #include "ForceBuyCard.h"
 #include "JumpCard.h"
-#include "Logger.h"
+#include "ConsoleIO.h"
+#include "GameConstants.h"
 #include "NumberCard.h"
 #include "ReverseCard.h"
 
-void BoardController::Setup(std::shared_ptr<std::vector<Player>> players)
+void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players)
 {
     CreateCards();
     DistributeCards(players);
 }
 
+void BoardController::FlipCard()
+{
+    if (Deck->IsEmpty())
+    {
+        ResetDeck();
+    }
+    DiscardPile->AddCard(Deck->RemoveAt(0));
+}
+
+void BoardController::PrintDiscardTop() const
+{
+    if (const std::weak_ptr<Card> tableCard = DiscardPile->GetAtTop(); !tableCard.expired())
+    {
+        const std::shared_ptr<Card> card = tableCard.lock();
+        card->Print();
+    }
+}
+
+bool BoardController::IsValidMove(const std::weak_ptr<Card>& card)
+{
+    if (card.expired())
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+void BoardController::PlayCard(const std::shared_ptr<Card>& card)
+{
+}
+
 void BoardController::CreateCards()
 {
     Deck = std::make_shared<CardCollection>();
+    DiscardPile = std::make_shared<CardCollection>();
 
     for (int i = 0; i < 10; ++i)
     {
@@ -31,28 +65,6 @@ void BoardController::CreateCards()
     CreateEffectCards(Red);
     CreateEffectCards(Yellow);
     CreateEffectCards(Green);
-
-#ifdef _DEBUG
-    std::vector<std::string> lines{};
-    const std::string cardPadding = "      ";
-    for (const std::shared_ptr<Card>& card : Deck->Cards)
-    {
-        std::vector<std::string> printableCard = card->GetPrintableCard();
-        for (size_t i = 0; i < printableCard.size(); ++i)
-        {
-            if (lines.size() <= i)
-            {
-                lines.emplace_back(printableCard[i] + cardPadding);
-            }
-            else
-            {
-                lines[i].append(printableCard[i] + cardPadding);
-            }
-        }
-    }
-    Logger::LogMessage(lines);
-    Logger::LogMessage("End Cards");
-#endif
 }
 
 void BoardController::CreateNumberCard(int number, ColorType color, const int amount) const
@@ -74,16 +86,15 @@ void BoardController::CreateEffectCards(ColorType color) const
     }
 }
 
-void BoardController::DistributeCards(std::shared_ptr<std::vector<Player>> players)
+void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>& players) const
 {
-}
-
-void BoardController::Print(std::shared_ptr<std::vector<Player>> players)
-{
-}
-
-void BoardController::CheckValidMove(std::shared_ptr<Card> card)
-{
+    for (int i = 0; i < GameConstants::CARDS_START_NUMBER; ++i)
+    {
+        for (Player& player : *players)
+        {
+            player.Cards.AddCard(Deck->RemoveAt(0));
+        }
+    }
 }
 
 void BoardController::ResetDeck()

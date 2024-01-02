@@ -9,12 +9,17 @@ class GameManager
 {
 public:
     void Setup();
-    
+    void CreatePlayers();
+
 private:
-    void ShufflePlayers();
     void StartGame();
-    void StartPlayerTurn();
+    void ShufflePlayers();
+    void StartCurrentPlayerTurn();
+    void SetNextPlayer();
     
     std::shared_ptr<std::vector<Player>> Players;
     std::shared_ptr<BoardController> Board;
+
+    int currentPlayer = 0;
+    int playerAmount = -1;
 };

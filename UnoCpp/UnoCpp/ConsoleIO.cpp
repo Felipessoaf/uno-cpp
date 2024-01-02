@@ -1,13 +1,13 @@
-#include "Logger.h"
+#include "ConsoleIO.h"
 
 #include <iostream>
 
-void Logger::LogMessage(const std::string& message)
+void ConsoleIO::LogMessage(const std::string& message)
 {
     std::cout << message;
 }
 
-void Logger::LogMessage(const std::vector<std::string>& lines)
+void ConsoleIO::LogMessage(const std::vector<std::string>& lines)
 {
     std::string fullMsg{};
     for (const std::string& msg : lines)
