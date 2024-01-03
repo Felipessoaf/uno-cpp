@@ -11,9 +11,8 @@
 
 void GameManager::Setup()
 {
-    CreatePlayers();
-    
     Board = std::make_shared<BoardController>();
+    CreatePlayers();
     Board->Setup(Players);
 
     StartGame();
