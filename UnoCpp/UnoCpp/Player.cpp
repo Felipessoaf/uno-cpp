@@ -21,12 +21,12 @@ void Player::PlayTurn()
         cardIndex = ConsoleIO::GetInput<int>("Choose a valid card to play (starting at index 0):\n");
         card = Cards.GetAt(cardIndex);
     }
-    while (card.expired() && !boardController->IsValidMove(card));
+    while (card.expired() || !boardController->IsValidMove(card));
 
     boardController->PlayCard(Cards.RemoveAt(cardIndex));
 }
 
-void Player::Print()
+void Player::Print() const
 {
     ConsoleIO::LogMessage(Name + "\n");
     Cards.Print();

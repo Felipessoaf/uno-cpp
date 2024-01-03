@@ -14,7 +14,7 @@ public:
     CardCollection Cards;
 
     void PlayTurn();
-    void Print();
+    void Print() const;
 
 private:
     std::shared_ptr<BoardController> boardController;
