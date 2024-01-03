@@ -16,15 +16,6 @@ void GameManager::Setup()
     Board->Setup(Players);
 
     StartGame();
-    
-// #ifdef _DEBUG
-//     ConsoleIO::LogMessage("Init Players\n");
-//     for (const Player& player : *Players)
-//     {
-//         ConsoleIO::LogMessage(player.Name + "\n");
-//     }
-//     ConsoleIO::LogMessage("End Players");
-// #endif
 }
 
 void GameManager::CreatePlayers()
@@ -58,13 +49,28 @@ void GameManager::ShufflePlayers()
 }
 
 void GameManager::StartCurrentPlayerTurn()
+{  
+    PrintRoundInfo();
+    
+    Players->at(currentPlayer).PlayTurn();
+    SetNextPlayer();
+
+    if (Board->IsMatchOver())
+    {
+        EndGame();
+    }
+    else
+    {
+        StartCurrentPlayerTurn();
+    }
+}
+
+void GameManager::PrintRoundInfo() const
 {
     system("cls");
     Players->at(currentPlayer).Print();
     ConsoleIO::LogMessage("Pile card:\n");
     Board->PrintDiscardTop();
-    Players->at(currentPlayer).PlayTurn();
-    SetNextPlayer();
 }
 
 void GameManager::SetNextPlayer()
@@ -74,4 +80,9 @@ void GameManager::SetNextPlayer()
     {
         currentPlayer = 0;
     }
+}
+
+void GameManager::EndGame() const
+{
+    ConsoleIO::GetInput<int>("Game Over");
 }

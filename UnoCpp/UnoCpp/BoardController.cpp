@@ -57,6 +57,11 @@ void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
 }
 
+bool BoardController::IsMatchOver() const
+{
+    return false;
+}
+
 void BoardController::CreateCards()
 {
     Deck = std::make_shared<CardCollection>();
@@ -73,6 +78,8 @@ void BoardController::CreateCards()
     CreateEffectCards(Red);
     CreateEffectCards(Yellow);
     CreateEffectCards(Green);
+
+    Deck->Shuffle();
 }
 
 void BoardController::CreateNumberCard(int number, ColorType color, const int amount) const

@@ -1,5 +1,7 @@
 #include "CardCollection.h"
 
+#include <chrono>
+#include <random>
 #include <string>
 
 #include "Card.h"
@@ -40,7 +42,7 @@ std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
 void CardCollection::Print() const
 {
     std::vector<std::string> lines{};
-    const std::string cardPadding = "      ";
+    const std::string cardPadding = "    ";
     for (const std::shared_ptr<Card>& card : Cards)
     {
         std::vector<std::string> printableCard = card->GetPrintableCard();
@@ -62,4 +64,11 @@ void CardCollection::Print() const
 bool CardCollection::IsEmpty() const
 {
     return Cards.empty();
+}
+
+void CardCollection::Shuffle()
+{
+    const unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    auto rng = std::default_random_engine {seed};
+    std::ranges::shuffle(Cards, rng);
 }

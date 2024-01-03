@@ -15,13 +15,13 @@ public:
     ColorType Color;
 
     virtual void Action() = 0;
+    virtual std::string GetName() const = 0;
 
     void Print() const;
     std::vector<std::string> GetPrintableCard() const;
     std::string GetPrintableLine(const std::string& textInMiddle, const std::string& symbol, int lineSize) const;
 
 private:
-    virtual std::string GetName() const = 0;
     static std::string ColorToString(ColorType color);
     static std::string GetColorId(ColorType color);
 };

@@ -15,4 +15,5 @@ public:
     std::weak_ptr<Card> GetAt(uint32_t index) const;
     void Print() const;
     bool IsEmpty() const;
+    void Shuffle();
 };
