@@ -6,13 +6,13 @@
 
 void Card::Print() const
 {
-    ConsoleIO::LogMessage(GetPrintableCard());
+    ConsoleIO::LogMessage(GetPrintableCard(-1));
 }
 
-std::vector<std::string> Card::GetPrintableCard() const
+std::vector<std::string> Card::GetPrintableCard(int index = -1) const
 {
     std::vector<std::string> card{};
-    card.emplace_back(GetColorId(Color) + "|==========|");
+    card.emplace_back(GetColorId(Color) + (index >= 0 ? "|====" + std::to_string(index) + "=====|" : "|==========|"));
     card.emplace_back(GetPrintableLine("", "|", 10));    
     card.emplace_back(GetPrintableLine(GetName(), "|", 10));
     card.emplace_back(GetPrintableLine(ColorToString(Color), "|", 10));

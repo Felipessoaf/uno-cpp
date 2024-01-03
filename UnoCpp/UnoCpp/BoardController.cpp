@@ -55,6 +55,7 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 
 void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
+    DiscardPile->AddCard(card);
 }
 
 bool BoardController::IsMatchOver() const

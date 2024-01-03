@@ -51,7 +51,8 @@ void GameManager::ShufflePlayers()
 void GameManager::StartCurrentPlayerTurn()
 {  
     PrintRoundInfo();
-    
+
+    //TODO: check if can play, if not, check if there's an effect (+2/4/6), else buy card
     Players->at(currentPlayer).PlayTurn();
     SetNextPlayer();
 
@@ -68,6 +69,15 @@ void GameManager::StartCurrentPlayerTurn()
 void GameManager::PrintRoundInfo() const
 {
     system("cls");
+
+    ConsoleIO::LogMessage("Order:\n");
+    for (int i = 0; i < Players->size(); i++)
+    {
+        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayer ? "<----\n" : "\n"));
+    }
+    
+    ConsoleIO::LogMessage("\n");
+    
     Players->at(currentPlayer).Print();
     ConsoleIO::LogMessage("Pile card:\n");
     Board->PrintDiscardTop();

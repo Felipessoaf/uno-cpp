@@ -28,6 +28,5 @@ void Player::PlayTurn()
 
 void Player::Print() const
 {
-    ConsoleIO::LogMessage(Name + "\n");
-    Cards.Print();
+    Cards.Print(true);
 }

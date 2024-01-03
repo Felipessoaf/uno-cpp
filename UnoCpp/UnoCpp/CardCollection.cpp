@@ -39,13 +39,13 @@ std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
     return Cards.at(index);
 }
 
-void CardCollection::Print() const
+void CardCollection::Print(bool includeIndex) const
 {
     std::vector<std::string> lines{};
     const std::string cardPadding = "    ";
-    for (const std::shared_ptr<Card>& card : Cards)
+    for (int j = 0; j < Cards.size(); j++)
     {
-        std::vector<std::string> printableCard = card->GetPrintableCard();
+        std::vector<std::string> printableCard = Cards.at(j)->GetPrintableCard(includeIndex ? j : -1);
         for (size_t i = 0; i < printableCard.size(); ++i)
         {
             if (lines.size() <= i)
