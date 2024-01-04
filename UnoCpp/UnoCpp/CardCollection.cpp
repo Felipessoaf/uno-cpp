@@ -24,12 +24,12 @@ std::shared_ptr<Card> CardCollection::RemoveAt(const uint32_t index)
     return card;
 }
 
-std::weak_ptr<Card> CardCollection::GetAtTop() const
+std::weak_ptr<Card> CardCollection::LookAtTop() const
 {
-    return Cards.at(Cards.size() - 1);
+    return LookAt(Cards.size() - 1);
 }
 
-std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
+std::weak_ptr<Card> CardCollection::LookAt(const size_t index) const
 {
     if (index < 0 || index >= Cards.size())
     {
@@ -71,4 +71,9 @@ void CardCollection::Shuffle()
     const unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
     auto rng = std::default_random_engine {seed};
     std::ranges::shuffle(Cards, rng);
+}
+
+size_t CardCollection::GetAmount() const
+{
+    return Cards.size();
 }

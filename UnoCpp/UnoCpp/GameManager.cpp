@@ -52,8 +52,20 @@ void GameManager::StartCurrentPlayerTurn()
 {  
     PrintRoundInfo();
 
-    //TODO: check if can play, if not, check if there's an effect (+2/4/6), else buy card
-    Players->at(currentPlayer).PlayTurn();
+    Player& currentPlayer = Players->at(currentPlayerIndex);
+    if (!currentPlayer.PlayTurn())
+    {
+        //TODO: check if there's an effect (+2/4/6), if not, buy card
+        currentPlayer.BuyCard();
+    }
+    else
+    {
+        if (currentPlayer.GetAmountOfCards() == 1 && !currentPlayer.HasShoutedUno())
+        {
+            currentPlayer.BuyCard();
+        }
+    }
+    
     SetNextPlayer();
 
     if (Board->IsMatchOver())
@@ -73,22 +85,27 @@ void GameManager::PrintRoundInfo() const
     ConsoleIO::LogMessage("Order:\n");
     for (int i = 0; i < Players->size(); i++)
     {
-        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayer ? "<----\n" : "\n"));
+        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayerIndex ? "<----\n" : "\n"));
+#ifdef _DEBUG
+        Players->at(i).Print();
+#endif
     }
     
     ConsoleIO::LogMessage("\n");
     
+#ifndef _DEBUG
     Players->at(currentPlayer).Print();
+#endif
     ConsoleIO::LogMessage("Pile card:\n");
     Board->PrintDiscardTop();
 }
 
 void GameManager::SetNextPlayer()
 {
-    currentPlayer++;
-    if(currentPlayer >= playerAmount)
+    currentPlayerIndex++;
+    if(currentPlayerIndex >= playerAmount)
     {
-        currentPlayer = 0;
+        currentPlayerIndex = 0;
     }
 }
 

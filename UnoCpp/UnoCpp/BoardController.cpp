@@ -28,7 +28,7 @@ void BoardController::FlipCard()
 
 void BoardController::PrintDiscardTop() const
 {
-    if (const std::weak_ptr<Card> tableCard = DiscardPile->GetAtTop(); !tableCard.expired())
+    if (const std::weak_ptr<Card> tableCard = DiscardPile->LookAtTop(); !tableCard.expired())
     {
         const std::shared_ptr<Card> card = tableCard.lock();
         card->Print();
@@ -43,7 +43,7 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
     }
 
     std::shared_ptr<Card> cardToCheck = card.lock();
-    std::shared_ptr<Card> cardAtTop = DiscardPile->GetAtTop().lock();
+    std::shared_ptr<Card> cardAtTop = DiscardPile->LookAtTop().lock();
     
     if (cardToCheck->Color != cardAtTop->Color && cardToCheck->GetName() != cardAtTop->GetName())
     {
@@ -61,6 +61,16 @@ void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 bool BoardController::IsMatchOver() const
 {
     return false;
+}
+
+std::shared_ptr<Card> BoardController::GetDeckTopCard()
+{
+    if (Deck->IsEmpty())
+    {
+        ResetDeck();
+    }
+    
+    return Deck->RemoveAt(0);
 }
 
 void BoardController::CreateCards()

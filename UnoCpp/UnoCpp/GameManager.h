@@ -22,6 +22,6 @@ private:
     std::shared_ptr<std::vector<Player>> Players;
     std::shared_ptr<BoardController> Board;
 
-    int currentPlayer {0};
+    int currentPlayerIndex {0};
     int playerAmount {-1};
 };
