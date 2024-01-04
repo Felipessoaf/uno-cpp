@@ -16,7 +16,6 @@ public:
     void PrintDiscardTop() const;
     bool IsValidMove(const std::weak_ptr<Card>& card) const;
     void PlayCard(const std::shared_ptr<Card>& card);
-    bool IsMatchOver() const;
     std::shared_ptr<Card> GetDeckTopCard();
 
 private:

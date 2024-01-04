@@ -66,15 +66,14 @@ void GameManager::StartCurrentPlayerTurn()
             currentPlayer.BuyCard(GameConstants::UNO_SHOUT_BUY);
         }
     }
-    
-    SetNextPlayer();
 
-    if (Board->IsMatchOver())
+    if (currentPlayer.GetAmountOfCards() == 0)
     {
         EndGame();
     }
     else
-    {
+    {    
+        SetNextPlayer();
         StartCurrentPlayerTurn();
     }
 }
@@ -112,5 +111,5 @@ void GameManager::SetNextPlayer()
 
 void GameManager::EndGame() const
 {
-    ConsoleIO::GetInput<int>("Game Over");
+    ConsoleIO::GetInput<std::string>("Game Over");
 }
