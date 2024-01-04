@@ -13,24 +13,34 @@ Player::Player(std::string name, std::shared_ptr<BoardController> board)
 bool Player::PlayTurn()
 {
     hasShoutedUno = false;
-    // TODO: if there's only 2 cards left, show the option to yell "UNO!"
+    bool shouldShoutUno = GetAmountOfCards() == 2;
 
     std::weak_ptr<Card> card{};
-    int cardIndex;
+    int move;
     do
     {
-        cardIndex = ConsoleIO::GetInput<int>("Choose a valid card to play (starting at index 0) or -1 if there's no valid card:\n");
+        std::string msg = "Choose a valid card to play (starting at index 0) or -1 if there's no valid card:\n";
+        if(shouldShoutUno)
+        {
+            msg += "Or -2 to shout UNO!\n";
+        }
+        move = ConsoleIO::GetInput<int>(msg);
 
-        if (cardIndex == -1)
+        if (move == -1)
         {
             return false;
         }
+
+        if (move == -2)
+        {
+            hasShoutedUno = true;
+        }
         
-        card = Cards.LookAt(cardIndex);
+        card = Cards.LookAt(move);
     }
     while (card.expired() || !boardController->IsValidMove(card));
 
-    boardController->PlayCard(Cards.RemoveAt(cardIndex));
+    boardController->PlayCard(Cards.RemoveAt(move));
     
     return true;
 }
