@@ -17,3 +17,8 @@ void ConsoleIO::LogMessage(const std::vector<std::string>& lines)
     }
     LogMessage(fullMsg);
 }
+
+void ConsoleIO::Clear()
+{
+    system("cls");
+}

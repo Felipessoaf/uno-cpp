@@ -80,7 +80,7 @@ void GameManager::StartCurrentPlayerTurn()
 
 void GameManager::PrintRoundInfo() const
 {
-    system("cls");
+    ConsoleIO::Clear();
 
     ConsoleIO::LogMessage("Order:\n");
     for (int i = 0; i < Players->size(); i++)

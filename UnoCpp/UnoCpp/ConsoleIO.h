@@ -8,6 +8,7 @@ class ConsoleIO
 public:
     static void LogMessage(const std::string& message);
     static void LogMessage(const std::vector<std::string>& lines);
+    static void Clear();
     
     template<typename T>
     static T GetInput(std::string_view msg);
