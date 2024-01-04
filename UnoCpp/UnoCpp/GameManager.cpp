@@ -56,8 +56,8 @@ void GameManager::StartCurrentPlayerTurn()
     Player& currentPlayer = Players->at(currentPlayerIndex);
     if (!currentPlayer.PlayTurn())
     {
-        //TODO: check if there's an effect (+2/4/6), if not, buy card
-        currentPlayer.BuyCard(1);
+        currentPlayer.BuyCard(amountOfCardsToBuy);
+        amountOfCardsToBuy = 1;
     }
     else
     {
@@ -102,11 +102,31 @@ void GameManager::PrintRoundInfo() const
 
 void GameManager::SetNextPlayer()
 {
-    currentPlayerIndex++;
-    if(currentPlayerIndex >= playerAmount)
+    const int maxIndex = playerAmount - 1;
+    currentPlayerIndex += amountOfPlayersToSkip * direction;
+    currentPlayerIndex %= maxIndex + 1;
+    
+    if (currentPlayerIndex < 0)
     {
-        currentPlayerIndex = 0;
+        currentPlayerIndex = maxIndex + 1 + currentPlayerIndex;
     }
+    
+    amountOfPlayersToSkip = 1;
+}
+
+void GameManager::AddSkipPlayerAmount(int skipAmount)
+{
+    amountOfPlayersToSkip += skipAmount;
+}
+
+void GameManager::AddBuyCardsAmount(int buyAmount)
+{
+    amountOfCardsToBuy += buyAmount;
+}
+
+void GameManager::ToggleDirection()
+{
+    direction *= -1;
 }
 
 void GameManager::EndGame() const

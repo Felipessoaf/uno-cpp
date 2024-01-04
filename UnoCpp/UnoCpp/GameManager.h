@@ -17,6 +17,9 @@ private:
     void StartCurrentPlayerTurn();
     void PrintRoundInfo() const;
     void SetNextPlayer();
+    void AddSkipPlayerAmount(int skipAmount);
+    void AddBuyCardsAmount(int buyAmount);
+    void ToggleDirection();
     void EndGame() const;
 
     std::shared_ptr<std::vector<Player>> Players;
@@ -24,4 +27,7 @@ private:
 
     int currentPlayerIndex {0};
     int playerAmount {-1};
+    int amountOfPlayersToSkip {1};
+    int amountOfCardsToBuy {1};
+    int direction {1};
 };
