@@ -134,7 +134,6 @@
     <ClCompile Include="BoardController.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardCollection.cpp" />
-    <ClCompile Include="ColorType.cpp" />
     <ClCompile Include="ForceBuyCard.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="JumpCard.cpp" />
