@@ -28,16 +28,24 @@ void BoardController::FlipCard()
 
 void BoardController::PrintDiscardTop() const
 {
-    if (const std::weak_ptr<Card> tableCard = DiscardPile->GetAtTop(); !tableCard.expired())
+    if (const std::weak_ptr<Card> tableCard = DiscardPile->LookAtTop(); !tableCard.expired())
     {
         const std::shared_ptr<Card> card = tableCard.lock();
         card->Print();
     }
 }
 
-bool BoardController::IsValidMove(const std::weak_ptr<Card>& card)
+bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 {
     if (card.expired())
+    {
+        return false;
+    }
+
+    std::shared_ptr<Card> cardToCheck = card.lock();
+    std::shared_ptr<Card> cardAtTop = DiscardPile->LookAtTop().lock();
+    
+    if (cardToCheck->Color != cardAtTop->Color && cardToCheck->GetName() != cardAtTop->GetName())
     {
         return false;
     }
@@ -47,6 +55,17 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card)
 
 void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
+    DiscardPile->AddCard(card);
+}
+
+std::shared_ptr<Card> BoardController::GetDeckTopCard()
+{
+    if (Deck->IsEmpty())
+    {
+        ResetDeck();
+    }
+    
+    return Deck->RemoveAt(0);
 }
 
 void BoardController::CreateCards()
@@ -65,6 +84,8 @@ void BoardController::CreateCards()
     CreateEffectCards(Red);
     CreateEffectCards(Yellow);
     CreateEffectCards(Green);
+
+    Deck->Shuffle();
 }
 
 void BoardController::CreateNumberCard(int number, ColorType color, const int amount) const

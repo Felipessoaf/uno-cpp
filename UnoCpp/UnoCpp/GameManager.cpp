@@ -8,35 +8,24 @@
 
 #include "BoardController.h"
 #include "ConsoleIO.h"
+#include "GameConstants.h"
 
 void GameManager::Setup()
 {
-    CreatePlayers();
-    
     Board = std::make_shared<BoardController>();
+    CreatePlayers();
     Board->Setup(Players);
 
     StartGame();
-    
-// #ifdef _DEBUG
-//     ConsoleIO::LogMessage("Init Players\n");
-//     for (const Player& player : *Players)
-//     {
-//         ConsoleIO::LogMessage(player.Name + "\n");
-//     }
-//     ConsoleIO::LogMessage("End Players");
-// #endif
 }
 
 void GameManager::CreatePlayers()
 {
-    playerAmount = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
-    if (playerAmount < 2 || playerAmount > 10)
+    do
     {
-        ConsoleIO::LogMessage("Invalid number of players\n");
-        CreatePlayers();
-        return;        
+        playerAmount = ConsoleIO::GetInput<int>("How many players will be playing? (min - 2; max - 10)\n");
     }
+    while (playerAmount < 2 || playerAmount > 10);
 
     Players = std::make_shared<std::vector<Player>>();
     for (int i = 0; i < playerAmount; ++i)
@@ -61,20 +50,66 @@ void GameManager::ShufflePlayers()
 }
 
 void GameManager::StartCurrentPlayerTurn()
+{  
+    PrintRoundInfo();
+
+    Player& currentPlayer = Players->at(currentPlayerIndex);
+    if (!currentPlayer.PlayTurn())
+    {
+        //TODO: check if there's an effect (+2/4/6), if not, buy card
+        currentPlayer.BuyCard(1);
+    }
+    else
+    {
+        if (currentPlayer.GetAmountOfCards() == 1 && !currentPlayer.HasShoutedUno())
+        {
+            currentPlayer.BuyCard(GameConstants::UNO_SHOUT_BUY);
+        }
+    }
+
+    if (currentPlayer.GetAmountOfCards() == 0)
+    {
+        EndGame();
+    }
+    else
+    {    
+        SetNextPlayer();
+        StartCurrentPlayerTurn();
+    }
+}
+
+void GameManager::PrintRoundInfo() const
 {
     system("cls");
+
+    ConsoleIO::LogMessage("Order:\n");
+    for (int i = 0; i < Players->size(); i++)
+    {
+        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayerIndex ? "<----\n" : "\n"));
+#ifdef _DEBUG
+        Players->at(i).Print();
+#endif
+    }
+    
+    ConsoleIO::LogMessage("\n");
+    
+#ifndef _DEBUG
     Players->at(currentPlayer).Print();
+#endif
     ConsoleIO::LogMessage("Pile card:\n");
     Board->PrintDiscardTop();
-    Players->at(currentPlayer).PlayTurn();
-    SetNextPlayer();
 }
 
 void GameManager::SetNextPlayer()
 {
-    currentPlayer++;
-    if(currentPlayer >= playerAmount)
+    currentPlayerIndex++;
+    if(currentPlayerIndex >= playerAmount)
     {
-        currentPlayer = 0;
+        currentPlayerIndex = 0;
     }
+}
+
+void GameManager::EndGame() const
+{
+    ConsoleIO::GetInput<std::string>("Game Over");
 }

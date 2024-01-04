@@ -15,11 +15,13 @@ private:
     void StartGame();
     void ShufflePlayers();
     void StartCurrentPlayerTurn();
+    void PrintRoundInfo() const;
     void SetNextPlayer();
-    
+    void EndGame() const;
+
     std::shared_ptr<std::vector<Player>> Players;
     std::shared_ptr<BoardController> Board;
 
-    int currentPlayer = 0;
-    int playerAmount = -1;
+    int currentPlayerIndex {0};
+    int playerAmount {-1};
 };

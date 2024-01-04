@@ -10,31 +10,60 @@ Player::Player(std::string name, std::shared_ptr<BoardController> board)
 {
 }
 
-void Player::PlayTurn()
+bool Player::PlayTurn()
 {
-    // TODO: if there's only 2 cards left, show the option to yell "UNO!"
-    
-    int cardIndex = ConsoleIO::GetInput<int>("Choose a card to play (starting at index 0)");
-    std::weak_ptr<Card> card = Cards.GetAt(cardIndex);
-    if (card.expired())
-    {
-        ConsoleIO::LogMessage("Invalid card index\n");
-        PlayTurn();
-        return;
-    }
-    
-    if (!boardController->IsValidMove(card))
-    {
-        ConsoleIO::LogMessage("Invalid move\n");
-        PlayTurn();
-        return;
-    }
+    hasShoutedUno = false;
+    bool shouldShoutUno = GetAmountOfCards() == 2;
 
-    boardController->PlayCard(Cards.RemoveAt(cardIndex));
+    std::weak_ptr<Card> card{};
+    int move;
+    do
+    {
+        std::string msg = "Choose a valid card to play (starting at index 0) or -1 if there's no valid card:\n";
+        if(shouldShoutUno)
+        {
+            msg += "Or -2 to shout UNO!\n";
+        }
+        move = ConsoleIO::GetInput<int>(msg);
+
+        if (move == -1)
+        {
+            return false;
+        }
+
+        if (move == -2)
+        {
+            hasShoutedUno = true;
+        }
+        
+        card = Cards.LookAt(move);
+    }
+    while (card.expired() || !boardController->IsValidMove(card));
+
+    boardController->PlayCard(Cards.RemoveAt(move));
+    
+    return true;
 }
 
-void Player::Print()
+void Player::Print() const
 {
-    ConsoleIO::LogMessage(Name + "\n");
-    Cards.Print();
+    Cards.Print(true);
+}
+
+void Player::BuyCard(int amount)
+{
+    for (int i = 0; i < amount; ++i)
+    {
+        Cards.AddCard(boardController->GetDeckTopCard());   
+    }
+}
+
+bool Player::HasShoutedUno() const
+{
+    return hasShoutedUno;
+}
+
+size_t Player::GetAmountOfCards() const
+{
+    return Cards.GetAmount();
 }

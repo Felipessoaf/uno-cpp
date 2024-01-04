@@ -1,5 +1,7 @@
 #include "CardCollection.h"
 
+#include <chrono>
+#include <random>
 #include <string>
 
 #include "Card.h"
@@ -22,12 +24,12 @@ std::shared_ptr<Card> CardCollection::RemoveAt(const uint32_t index)
     return card;
 }
 
-std::weak_ptr<Card> CardCollection::GetAtTop() const
+std::weak_ptr<Card> CardCollection::LookAtTop() const
 {
-    return Cards.at(Cards.size() - 1);
+    return LookAt(Cards.size() - 1);
 }
 
-std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
+std::weak_ptr<Card> CardCollection::LookAt(const size_t index) const
 {
     if (index < 0 || index >= Cards.size())
     {
@@ -37,13 +39,13 @@ std::weak_ptr<Card> CardCollection::GetAt(const uint32_t index) const
     return Cards.at(index);
 }
 
-void CardCollection::Print() const
+void CardCollection::Print(bool includeIndex) const
 {
     std::vector<std::string> lines{};
-    const std::string cardPadding = "      ";
-    for (const std::shared_ptr<Card>& card : Cards)
+    const std::string cardPadding = "    ";
+    for (int j = 0; j < Cards.size(); j++)
     {
-        std::vector<std::string> printableCard = card->GetPrintableCard();
+        std::vector<std::string> printableCard = Cards.at(j)->GetPrintableCard(includeIndex ? j : -1);
         for (size_t i = 0; i < printableCard.size(); ++i)
         {
             if (lines.size() <= i)
@@ -62,4 +64,16 @@ void CardCollection::Print() const
 bool CardCollection::IsEmpty() const
 {
     return Cards.empty();
+}
+
+void CardCollection::Shuffle()
+{
+    const unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+    auto rng = std::default_random_engine {seed};
+    std::ranges::shuffle(Cards, rng);
+}
+
+size_t CardCollection::GetAmount() const
+{
+    return Cards.size();
 }

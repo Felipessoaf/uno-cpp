@@ -13,9 +13,13 @@ public:
     std::string Name;
     CardCollection Cards;
 
-    void PlayTurn();
-    void Print();
+    [[nodiscard]] bool PlayTurn();
+    void Print() const;
+    void BuyCard(int amount);
+    bool HasShoutedUno() const;
+    size_t GetAmountOfCards() const;
 
 private:
     std::shared_ptr<BoardController> boardController;
+    bool hasShoutedUno;
 };

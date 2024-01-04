@@ -14,8 +14,9 @@ public:
     void Setup(const std::shared_ptr<std::vector<Player>>& players);
     void FlipCard();
     void PrintDiscardTop() const;
-    bool IsValidMove(const std::weak_ptr<Card>& card);
+    bool IsValidMove(const std::weak_ptr<Card>& card) const;
     void PlayCard(const std::shared_ptr<Card>& card);
+    std::shared_ptr<Card> GetDeckTopCard();
 
 private:
     void CreateCards();
