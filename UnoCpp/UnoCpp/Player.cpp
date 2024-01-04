@@ -40,9 +40,12 @@ void Player::Print() const
     Cards.Print(true);
 }
 
-void Player::BuyCard()
+void Player::BuyCard(int amount)
 {
-    Cards.AddCard(boardController->GetDeckTopCard());
+    for (int i = 0; i < amount; ++i)
+    {
+        Cards.AddCard(boardController->GetDeckTopCard());   
+    }
 }
 
 bool Player::HasShoutedUno() const

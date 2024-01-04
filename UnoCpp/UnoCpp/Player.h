@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] bool PlayTurn();
     void Print() const;
-    void BuyCard();
+    void BuyCard(int amount);
     bool HasShoutedUno() const;
     size_t GetAmountOfCards() const;
 

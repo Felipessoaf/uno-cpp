@@ -8,6 +8,7 @@
 
 #include "BoardController.h"
 #include "ConsoleIO.h"
+#include "GameConstants.h"
 
 void GameManager::Setup()
 {
@@ -56,13 +57,13 @@ void GameManager::StartCurrentPlayerTurn()
     if (!currentPlayer.PlayTurn())
     {
         //TODO: check if there's an effect (+2/4/6), if not, buy card
-        currentPlayer.BuyCard();
+        currentPlayer.BuyCard(1);
     }
     else
     {
         if (currentPlayer.GetAmountOfCards() == 1 && !currentPlayer.HasShoutedUno())
         {
-            currentPlayer.BuyCard();
+            currentPlayer.BuyCard(GameConstants::UNO_SHOUT_BUY);
         }
     }
     
