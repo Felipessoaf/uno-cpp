@@ -30,6 +30,6 @@ private:
     int currentPlayerIndex {0};
     int playerAmount {-1};
     int amountOfPlayersToSkip {1};
-    int amountOfCardsToBuy {1};
+    int amountOfCardsToBuy {0};
     int direction {1};
 };

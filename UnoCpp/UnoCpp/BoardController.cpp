@@ -36,7 +36,7 @@ void BoardController::PrintDiscardTop() const
     }
 }
 
-bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
+bool BoardController::IsValidMove(const std::weak_ptr<Card>& card, bool isForceBuyInEffect) const
 {
     if (card.expired())
     {
@@ -45,6 +45,11 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 
     std::shared_ptr<Card> cardToCheck = card.lock();
     std::shared_ptr<Card> cardAtTop = DiscardPile->LookAtTop().lock();
+
+    if (isForceBuyInEffect && cardToCheck->GetName() != cardAtTop->GetName())
+    {
+        return false;
+    }
     
     if (cardToCheck->Color != cardAtTop->Color && cardToCheck->GetName() != cardAtTop->GetName())
     {

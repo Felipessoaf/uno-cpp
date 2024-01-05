@@ -10,7 +10,7 @@ Player::Player(std::string name, std::shared_ptr<BoardController> board)
 {
 }
 
-bool Player::PlayTurn()
+bool Player::PlayTurn(bool isForceBuyInEffect)
 {
     hasShoutedUno = false;
     bool shouldShoutUno = GetAmountOfCards() == 2;
@@ -38,7 +38,7 @@ bool Player::PlayTurn()
         
         card = Cards.LookAt(move);
     }
-    while (card.expired() || !boardController->IsValidMove(card));
+    while (card.expired() || !boardController->IsValidMove(card, isForceBuyInEffect));
 
     boardController->PlayCard(Cards.RemoveAt(move));
     

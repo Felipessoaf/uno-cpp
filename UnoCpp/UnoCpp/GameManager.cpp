@@ -54,10 +54,10 @@ void GameManager::StartCurrentPlayerTurn()
     PrintRoundInfo();
 
     Player& currentPlayer = Players->at(currentPlayerIndex);
-    if (!currentPlayer.PlayTurn())
+    if (!currentPlayer.PlayTurn(amountOfCardsToBuy > 0))
     {
-        currentPlayer.BuyCard(amountOfCardsToBuy);
-        amountOfCardsToBuy = 1;
+        currentPlayer.BuyCard(amountOfCardsToBuy > 0 ? amountOfCardsToBuy : 1);
+        amountOfCardsToBuy = 0;
     }
     else
     {
