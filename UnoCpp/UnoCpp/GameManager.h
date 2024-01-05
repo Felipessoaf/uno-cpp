@@ -2,10 +2,12 @@
 #include <memory>
 #include <vector>
 
+#include "ICardEffectHandler.h"
+
 class Player;
 class BoardController;
 
-class GameManager
+class GameManager : public ICardEffectHandler
 {
 public:
     void Setup();
@@ -17,9 +19,9 @@ private:
     void StartCurrentPlayerTurn();
     void PrintRoundInfo() const;
     void SetNextPlayer();
-    void AddSkipPlayerAmount(int skipAmount);
-    void AddBuyCardsAmount(int buyAmount);
-    void ToggleDirection();
+    void AddSkipPlayerAmount(int skipAmount) override;
+    void AddBuyCardsAmount(int buyAmount) override;
+    void ToggleDirection() override;
     void EndGame() const;
 
     std::shared_ptr<std::vector<Player>> Players;

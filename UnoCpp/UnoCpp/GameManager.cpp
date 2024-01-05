@@ -14,8 +14,8 @@ void GameManager::Setup()
 {
     Board = std::make_shared<BoardController>();
     CreatePlayers();
-    Board->Setup(Players);
-
+    Board->Setup(Players, std::shared_ptr<ICardEffectHandler>(this));
+    
     StartGame();
 }
 

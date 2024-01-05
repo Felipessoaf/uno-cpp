@@ -1,6 +1,7 @@
 #include "BoardController.h"
 
 #include <memory>
+#include <utility>
 
 #include "Card.h"
 #include "CardCollection.h"
@@ -10,8 +11,9 @@
 #include "NumberCard.h"
 #include "ReverseCard.h"
 
-void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players)
+void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
 {
+    CardEffectHandler = std::move(cardEffectHandler);
     CreateCards();
     DistributeCards(players);
 }
@@ -54,6 +56,7 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 
 void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
+    card->Action();
     DiscardPile->AddCard(card);
 }
 
@@ -91,7 +94,7 @@ void BoardController::CreateNumberCard(int number, ColorType color, const int am
 {
     for (int i = 0; i < amount; ++i)
     {
-        const std::shared_ptr<Card> card = std::static_pointer_cast<Card>(std::make_shared<NumberCard>(color, number));
+        const std::shared_ptr<Card> card = std::static_pointer_cast<Card>(std::make_shared<NumberCard>(color, number, CardEffectHandler));
         Deck->AddCard(card);   
     }
 }
@@ -100,9 +103,9 @@ void BoardController::CreateEffectCards(ColorType color) const
 {
     for (int i = 0; i < 2; ++i)
     {
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ForceBuyCard>(color, 2)));
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ReverseCard>(color)));
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<JumpCard>(color)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ForceBuyCard>(color, 2, CardEffectHandler)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ReverseCard>(color, CardEffectHandler)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<JumpCard>(color, CardEffectHandler)));
     }
 }
 
@@ -119,4 +122,5 @@ void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>
 
 void BoardController::ResetDeck()
 {
+    //keep top discard card
 }
