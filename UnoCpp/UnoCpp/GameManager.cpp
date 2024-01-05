@@ -131,6 +131,25 @@ void GameManager::ToggleDirection()
     direction *= -1;
 }
 
+void GameManager::SwitchHand(int playerIndex)
+{
+    Players->at(playerIndex);
+    Players->at(currentPlayerIndex);
+    
+    std::shared_ptr<Card> topCard = DiscardPile->RemoveAtTop();
+    std::vector<std::shared_ptr<Card>> discardPile = DiscardPile->GetCards(); 
+    std::vector<std::shared_ptr<Card>> deck = Deck->GetCards();
+    deck.insert(
+      deck.end(),
+      std::make_move_iterator(discardPile.begin()),
+      std::make_move_iterator(discardPile.end())
+    );
+    Deck->SetCards(std::move(deck));
+    
+    DiscardPile->ClearCards();
+    DiscardPile->AddCard(topCard);
+}
+
 void GameManager::EndGame() const
 {
     ConsoleIO::GetInput<std::string>("Game Over");

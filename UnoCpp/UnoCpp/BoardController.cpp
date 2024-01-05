@@ -10,6 +10,7 @@
 #include "GameConstants.h"
 #include "NumberCard.h"
 #include "ReverseCard.h"
+#include "SwitchHandCard.h"
 
 void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
 {
@@ -49,6 +50,11 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card, bool isForceB
     if (isForceBuyInEffect && cardToCheck->GetName() != cardAtTop->GetName())
     {
         return false;
+    }
+
+    if (cardToCheck->Color == Special || cardAtTop->Color == Special)
+    {
+        return true;
     }
     
     if (cardToCheck->Color != cardAtTop->Color && cardToCheck->GetName() != cardAtTop->GetName())
@@ -101,6 +107,7 @@ void BoardController::CreateCards()
     CreateEffectCards(Red);
     CreateEffectCards(Yellow);
     CreateEffectCards(Green);
+    CreateSpecialEffectCards(Special);
 
     Deck->Shuffle();
 }
@@ -121,6 +128,14 @@ void BoardController::CreateEffectCards(ColorType color) const
         Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ForceBuyCard>(color, 2, CardEffectHandler)));
         Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ReverseCard>(color, CardEffectHandler)));
         Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<JumpCard>(color, CardEffectHandler)));
+    }
+}
+
+void BoardController::CreateSpecialEffectCards(ColorType color) const
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<SwitchHandCard>(color, CardEffectHandler)));
     }
 }
 

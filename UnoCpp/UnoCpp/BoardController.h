@@ -25,6 +25,7 @@ private:
     void CreateCards();
     void CreateNumberCard(int number, ColorType color, int amount) const;
     void CreateEffectCards(ColorType color) const;
+    void CreateSpecialEffectCards(ColorType color) const;
     void DistributeCards(const std::shared_ptr<std::vector<Player>>& players) const;
     void ResetDeck();
     
