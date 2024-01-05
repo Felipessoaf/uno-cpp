@@ -10,11 +10,15 @@ class CardCollection
     
 public:
     void AddCard(const std::shared_ptr<Card>& card);
-    std::shared_ptr<Card> RemoveAt(uint32_t index);
-    std::weak_ptr<Card> LookAtTop() const;
-    std::weak_ptr<Card> LookAt(size_t index) const;
+    [[nodiscard]] std::shared_ptr<Card> RemoveAtTop();
+    [[nodiscard]] std::shared_ptr<Card> RemoveAt(uint32_t index);
+    [[nodiscard]] std::weak_ptr<Card> LookAtTop() const;
+    [[nodiscard]] std::weak_ptr<Card> LookAt(size_t index) const;
     void Print(bool includeIndex) const;
-    bool IsEmpty() const;
+    [[nodiscard]] bool IsEmpty() const;
     void Shuffle();
-    size_t GetAmount() const;
+    [[nodiscard]] size_t GetAmount() const;
+    void ClearCards();
+    std::vector<std::shared_ptr<Card>> GetCards();
+    void SetCards(std::vector<std::shared_ptr<Card>> cards);
 };

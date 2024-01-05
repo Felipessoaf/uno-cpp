@@ -70,12 +70,22 @@ std::shared_ptr<Card> BoardController::GetDeckTopCard()
     return Deck->RemoveAt(0);
 }
 
+size_t BoardController::GetDeckAmount() const
+{
+    return Deck->GetAmount();
+}
+
+size_t BoardController::GetDiscardPileAmount() const
+{
+    return DiscardPile->GetAmount();
+}
+
 void BoardController::CreateCards()
 {
     Deck = std::make_shared<CardCollection>();
     DiscardPile = std::make_shared<CardCollection>();
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i <= GameConstants::CARDS_NUMBER_MAX; ++i)
     {
         CreateNumberCard(i, Blue, 2);
         CreateNumberCard(i, Red, 2);
@@ -122,5 +132,16 @@ void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>
 
 void BoardController::ResetDeck()
 {
-    //keep top discard card
+    std::shared_ptr<Card> topCard = DiscardPile->RemoveAtTop();
+    std::vector<std::shared_ptr<Card>> discardPile = DiscardPile->GetCards(); 
+    std::vector<std::shared_ptr<Card>> deck = Deck->GetCards();
+    deck.insert(
+      deck.end(),
+      std::make_move_iterator(discardPile.begin()),
+      std::make_move_iterator(discardPile.end())
+    );
+    Deck->SetCards(std::move(deck));
+    
+    DiscardPile->ClearCards();
+    DiscardPile->AddCard(topCard);
 }

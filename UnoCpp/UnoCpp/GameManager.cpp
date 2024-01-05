@@ -92,6 +92,8 @@ void GameManager::PrintRoundInfo() const
     }
     
     ConsoleIO::LogMessage("\n");
+    ConsoleIO::LogMessage("Deck size: " + std::to_string(Board->GetDeckAmount()) + "\n");
+    ConsoleIO::LogMessage("Pile size: " + std::to_string(Board->GetDiscardPileAmount()) + "\n");
     
 #ifndef _DEBUG
     Players->at(currentPlayer).Print();

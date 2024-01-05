@@ -18,6 +18,8 @@ public:
     bool IsValidMove(const std::weak_ptr<Card>& card) const;
     void PlayCard(const std::shared_ptr<Card>& card);
     std::shared_ptr<Card> GetDeckTopCard();
+    size_t GetDeckAmount() const;
+    size_t GetDiscardPileAmount() const;
 
 private:
     void CreateCards();

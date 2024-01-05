@@ -12,6 +12,11 @@ void CardCollection::AddCard(const std::shared_ptr<Card>& card)
     Cards.emplace_back(card);
 }
 
+std::shared_ptr<Card> CardCollection::RemoveAtTop()
+{
+    return RemoveAt(Cards.size() - 1);
+}
+
 std::shared_ptr<Card> CardCollection::RemoveAt(const uint32_t index)
 {
     if (index < 0 || index >= Cards.size())
@@ -76,4 +81,19 @@ void CardCollection::Shuffle()
 size_t CardCollection::GetAmount() const
 {
     return Cards.size();
+}
+
+void CardCollection::ClearCards()
+{
+    Cards.clear();
+}
+
+std::vector<std::shared_ptr<Card>> CardCollection::GetCards()
+{
+    return std::move(Cards);
+}
+
+void CardCollection::SetCards(std::vector<std::shared_ptr<Card>> cards)
+{
+    Cards = std::move(cards);
 }
