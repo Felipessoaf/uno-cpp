@@ -85,7 +85,7 @@ void GameManager::PrintRoundInfo() const
     ConsoleIO::LogMessage("Order:\n");
     for (int i = 0; i < Players->size(); i++)
     {
-        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayerIndex ? "<----\n" : "\n"));
+        ConsoleIO::LogMessage(Players->at(i).Name + "(" + std::to_string(i) + ")" + (i == currentPlayerIndex ? " <----\n" : "\n"));
 #ifdef _DEBUG
         Players->at(i).Print();
 #endif
@@ -131,23 +131,44 @@ void GameManager::ToggleDirection()
     direction *= -1;
 }
 
-void GameManager::SwitchHand(int playerIndex)
+bool GameManager::SwitchHand(int playerIndex)
 {
-    Players->at(playerIndex);
-    Players->at(currentPlayerIndex);
+    if (playerIndex < 0 || playerIndex >= playerAmount || playerIndex == currentPlayerIndex)
+    {
+        return false;
+    }
     
-    std::shared_ptr<Card> topCard = DiscardPile->RemoveAtTop();
-    std::vector<std::shared_ptr<Card>> discardPile = DiscardPile->GetCards(); 
-    std::vector<std::shared_ptr<Card>> deck = Deck->GetCards();
-    deck.insert(
-      deck.end(),
-      std::make_move_iterator(discardPile.begin()),
-      std::make_move_iterator(discardPile.end())
+    Player& currentPlayer = Players->at(currentPlayerIndex);
+    Player& otherPlayer = Players->at(playerIndex);
+    
+    std::vector<std::shared_ptr<Card>> currentPlayerCards = currentPlayer.Cards.GetCards();
+    std::vector<std::shared_ptr<Card>> otherPlayerCards = otherPlayer.Cards.GetCards();
+    std::vector<std::shared_ptr<Card>> tempCards{};
+    
+    tempCards.insert(
+      tempCards.end(),
+      std::make_move_iterator(currentPlayerCards.begin()),
+      std::make_move_iterator(currentPlayerCards.end())
     );
-    Deck->SetCards(std::move(deck));
     
-    DiscardPile->ClearCards();
-    DiscardPile->AddCard(topCard);
+    currentPlayerCards.clear();
+    currentPlayerCards.insert(
+      currentPlayerCards.end(),
+      std::make_move_iterator(otherPlayerCards.begin()),
+      std::make_move_iterator(otherPlayerCards.end())
+      );
+    
+    otherPlayerCards.clear();
+    otherPlayerCards.insert(
+      otherPlayerCards.end(),
+      std::make_move_iterator(tempCards.begin()),
+      std::make_move_iterator(tempCards.end())
+    );
+    
+    currentPlayer.Cards.SetCards(std::move(currentPlayerCards));
+    otherPlayer.Cards.SetCards(std::move(otherPlayerCards));
+    
+    return true;
 }
 
 void GameManager::EndGame() const
