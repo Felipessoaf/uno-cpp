@@ -2,8 +2,8 @@
 
 #include "ICardEffectHandler.h"
 
-ForceBuyCard::ForceBuyCard(ColorType color, int amount, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
-    : Card(color, std::move(cardEffectHandler)), Amount(amount)
+ForceBuyCard::ForceBuyCard(ColorType color, int amount, ICardEffectHandler* cardEffectHandler)
+    : Card(color, cardEffectHandler), Amount(amount)
 {
 }
 

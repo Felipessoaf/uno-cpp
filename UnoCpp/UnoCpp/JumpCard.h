@@ -4,7 +4,7 @@
 class JumpCard : public Card
 {
 public:
-    explicit JumpCard(ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler);
+    explicit JumpCard(ColorType color, ICardEffectHandler* cardEffectHandler);
 
     void Action() override;
     std::string GetName() const override;

@@ -14,7 +14,7 @@ void GameManager::Setup()
 {
     Board = std::make_shared<BoardController>();
     CreatePlayers();
-    Board->Setup(Players, std::shared_ptr<ICardEffectHandler>(this));
+    Board->Setup(Players, this);
     
     StartGame();
 }
@@ -96,7 +96,7 @@ void GameManager::PrintRoundInfo() const
     ConsoleIO::LogMessage("Pile size: " + std::to_string(Board->GetDiscardPileAmount()) + "\n");
     
 #ifndef _DEBUG
-    Players->at(currentPlayer).Print();
+    Players->at(currentPlayerIndex).Print();
 #endif
     ConsoleIO::LogMessage("Pile card:\n");
     Board->PrintDiscardTop();

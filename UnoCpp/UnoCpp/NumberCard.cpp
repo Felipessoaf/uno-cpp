@@ -3,8 +3,8 @@
 #include <iostream>
 #include <utility>
 
-NumberCard::NumberCard(const ColorType color, const int number, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
-    : Card(color, std::move(cardEffectHandler)), Number(number)
+NumberCard::NumberCard(const ColorType color, const int number, ICardEffectHandler* cardEffectHandler)
+    : Card(color, cardEffectHandler), Number(number)
 {
 }
 

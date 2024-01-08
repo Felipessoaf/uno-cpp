@@ -3,7 +3,7 @@
 #include "ConsoleIO.h"
 #include "ICardEffectHandler.h"
 
-SwitchHandCard::SwitchHandCard(ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler) : Card(color, std::move(cardEffectHandler))
+SwitchHandCard::SwitchHandCard(ColorType color, ICardEffectHandler* cardEffectHandler) : Card(color, cardEffectHandler)
 {
 }
 
