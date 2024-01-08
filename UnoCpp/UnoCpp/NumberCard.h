@@ -4,7 +4,7 @@
 class NumberCard : public Card
 {
 public:
-    explicit NumberCard(ColorType color, int number, std::shared_ptr<ICardEffectHandler> cardEffectHandler);
+    explicit NumberCard(ColorType color, int number, ICardEffectHandler* cardEffectHandler);
 
     void Action() override;
     std::string GetName() const override;

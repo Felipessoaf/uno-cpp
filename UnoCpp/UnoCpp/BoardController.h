@@ -12,7 +12,7 @@ class CardCollection;
 class BoardController
 {
 public:
-    void Setup(const std::shared_ptr<std::vector<Player>>& players, std::shared_ptr<ICardEffectHandler> cardEffectHandler);
+    void Setup(const std::shared_ptr<std::vector<Player>>& players, ICardEffectHandler* cardEffectHandler);
     void FlipCard();
     void PrintDiscardTop() const;
     [[nodiscard]] bool IsValidMove(const std::weak_ptr<Card>& card, bool isForceBuyInEffect) const;
@@ -31,5 +31,5 @@ private:
     
     std::shared_ptr<CardCollection> Deck;
     std::shared_ptr<CardCollection> DiscardPile;
-    std::shared_ptr<ICardEffectHandler> CardEffectHandler;
+    ICardEffectHandler* CardEffectHandler{};
 };

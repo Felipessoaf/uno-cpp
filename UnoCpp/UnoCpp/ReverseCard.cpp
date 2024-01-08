@@ -2,8 +2,8 @@
 
 #include "ICardEffectHandler.h"
 
-ReverseCard::ReverseCard(ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
-    : Card(color, std::move(cardEffectHandler))
+ReverseCard::ReverseCard(ColorType color, ICardEffectHandler* cardEffectHandler)
+    : Card(color, cardEffectHandler)
 {
 }
 

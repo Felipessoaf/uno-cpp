@@ -11,8 +11,8 @@ class ICardEffectHandler;
 class Card
 {
 public:
-    explicit Card(const ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler) : Color {color}, CardEffectHandler(
-        std::move(cardEffectHandler))
+    explicit Card(const ColorType color, ICardEffectHandler* cardEffectHandler) : Color {color}, CardEffectHandler(
+        cardEffectHandler)
     {
         
     }
@@ -27,7 +27,7 @@ public:
     std::string GetPrintableLine(const std::string& textInMiddle, const std::string& symbol, int lineSize) const;
 
 protected:    
-    std::shared_ptr<ICardEffectHandler> CardEffectHandler;
+    ICardEffectHandler* CardEffectHandler;
 
 private:
     static std::string ColorToString(ColorType color);

@@ -12,9 +12,9 @@
 #include "ReverseCard.h"
 #include "SwitchHandCard.h"
 
-void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
+void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players, ICardEffectHandler* cardEffectHandler)
 {
-    CardEffectHandler = std::move(cardEffectHandler);
+    CardEffectHandler = cardEffectHandler;
     CreateCards();
     DistributeCards(players);
 }
