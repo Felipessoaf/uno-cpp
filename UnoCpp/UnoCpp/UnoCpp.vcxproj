@@ -141,6 +141,7 @@
     <ClCompile Include="NumberCard.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ReverseCard.cpp" />
+    <ClCompile Include="SwitchHandCard.cpp" />
     <ClCompile Include="UnoCpp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="NumberCard.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ReverseCard.h" />
+    <ClInclude Include="SwitchHandCard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

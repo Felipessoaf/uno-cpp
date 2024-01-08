@@ -22,6 +22,7 @@ private:
     void AddSkipPlayerAmount(int skipAmount) override;
     void AddBuyCardsAmount(int buyAmount) override;
     void ToggleDirection() override;
+    bool SwitchHand(int playerIndex) override;
     void EndGame() const;
 
     std::shared_ptr<std::vector<Player>> Players;

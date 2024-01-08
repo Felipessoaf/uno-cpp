@@ -2,7 +2,7 @@
 
 #include "ICardEffectHandler.h"
 
-JumpCard::JumpCard(ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler): Card(color, std::move(cardEffectHandler))
+JumpCard::JumpCard(ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler) : Card(color, std::move(cardEffectHandler))
 {
 }
 

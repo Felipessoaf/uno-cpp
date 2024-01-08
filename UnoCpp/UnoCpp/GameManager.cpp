@@ -85,7 +85,7 @@ void GameManager::PrintRoundInfo() const
     ConsoleIO::LogMessage("Order:\n");
     for (int i = 0; i < Players->size(); i++)
     {
-        ConsoleIO::LogMessage(Players->at(i).Name + (i == currentPlayerIndex ? "<----\n" : "\n"));
+        ConsoleIO::LogMessage(Players->at(i).Name + "(" + std::to_string(i) + ")" + (i == currentPlayerIndex ? " <----\n" : "\n"));
 #ifdef _DEBUG
         Players->at(i).Print();
 #endif
@@ -129,6 +129,46 @@ void GameManager::AddBuyCardsAmount(int buyAmount)
 void GameManager::ToggleDirection()
 {
     direction *= -1;
+}
+
+bool GameManager::SwitchHand(int playerIndex)
+{
+    if (playerIndex < 0 || playerIndex >= playerAmount || playerIndex == currentPlayerIndex)
+    {
+        return false;
+    }
+    
+    Player& currentPlayer = Players->at(currentPlayerIndex);
+    Player& otherPlayer = Players->at(playerIndex);
+    
+    std::vector<std::shared_ptr<Card>> currentPlayerCards = currentPlayer.Cards.GetCards();
+    std::vector<std::shared_ptr<Card>> otherPlayerCards = otherPlayer.Cards.GetCards();
+    std::vector<std::shared_ptr<Card>> tempCards{};
+    
+    tempCards.insert(
+      tempCards.end(),
+      std::make_move_iterator(currentPlayerCards.begin()),
+      std::make_move_iterator(currentPlayerCards.end())
+    );
+    
+    currentPlayerCards.clear();
+    currentPlayerCards.insert(
+      currentPlayerCards.end(),
+      std::make_move_iterator(otherPlayerCards.begin()),
+      std::make_move_iterator(otherPlayerCards.end())
+      );
+    
+    otherPlayerCards.clear();
+    otherPlayerCards.insert(
+      otherPlayerCards.end(),
+      std::make_move_iterator(tempCards.begin()),
+      std::make_move_iterator(tempCards.end())
+    );
+    
+    currentPlayer.Cards.SetCards(std::move(currentPlayerCards));
+    otherPlayer.Cards.SetCards(std::move(otherPlayerCards));
+    
+    return true;
 }
 
 void GameManager::EndGame() const

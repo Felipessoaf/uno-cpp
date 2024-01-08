@@ -8,4 +8,5 @@ public:
     virtual void AddSkipPlayerAmount(int skipAmount) = 0;
     virtual void AddBuyCardsAmount(int buyAmount) = 0;
     virtual void ToggleDirection() = 0;
+    virtual bool SwitchHand(int playerIndex) = 0;
 };

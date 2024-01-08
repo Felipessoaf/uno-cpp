@@ -55,6 +55,8 @@ std::string Card::ColorToString(ColorType color)
         return "Yellow";
     case Green:
         return "Green";
+    case Special:
+        return "Special";
     default:
         throw std::invalid_argument("Invalid Color");
     }
@@ -74,6 +76,8 @@ std::string Card::GetColorId(ColorType color)
         return "\033[33m";
     case Green:
         return "\033[32m";
+    case Special:
+        return "\033[37m";
     default:
         throw std::invalid_argument("Invalid Color");
     }
