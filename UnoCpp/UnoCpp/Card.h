@@ -1,13 +1,18 @@
 #pragma once
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ColorType.h"
 
+class ICardEffectHandler;
+
 class Card
 {
 public:
-    explicit Card(const ColorType color) : Color {color}
+    explicit Card(const ColorType color, std::shared_ptr<ICardEffectHandler> cardEffectHandler) : Color {color}, CardEffectHandler(
+        std::move(cardEffectHandler))
     {
         
     }
@@ -20,6 +25,9 @@ public:
     void Print() const;
     std::vector<std::string> GetPrintableCard(int index) const;
     std::string GetPrintableLine(const std::string& textInMiddle, const std::string& symbol, int lineSize) const;
+
+protected:    
+    std::shared_ptr<ICardEffectHandler> CardEffectHandler;
 
 private:
     static std::string ColorToString(ColorType color);

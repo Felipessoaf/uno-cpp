@@ -1,18 +1,19 @@
 #include "BoardController.h"
 
 #include <memory>
+#include <utility>
 
 #include "Card.h"
 #include "CardCollection.h"
 #include "ForceBuyCard.h"
 #include "JumpCard.h"
-#include "ConsoleIO.h"
 #include "GameConstants.h"
 #include "NumberCard.h"
 #include "ReverseCard.h"
 
-void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players)
+void BoardController::Setup(const std::shared_ptr<std::vector<Player>>& players, std::shared_ptr<ICardEffectHandler> cardEffectHandler)
 {
+    CardEffectHandler = std::move(cardEffectHandler);
     CreateCards();
     DistributeCards(players);
 }
@@ -35,7 +36,7 @@ void BoardController::PrintDiscardTop() const
     }
 }
 
-bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
+bool BoardController::IsValidMove(const std::weak_ptr<Card>& card, bool isForceBuyInEffect) const
 {
     if (card.expired())
     {
@@ -44,6 +45,11 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 
     std::shared_ptr<Card> cardToCheck = card.lock();
     std::shared_ptr<Card> cardAtTop = DiscardPile->LookAtTop().lock();
+
+    if (isForceBuyInEffect && cardToCheck->GetName() != cardAtTop->GetName())
+    {
+        return false;
+    }
     
     if (cardToCheck->Color != cardAtTop->Color && cardToCheck->GetName() != cardAtTop->GetName())
     {
@@ -55,6 +61,7 @@ bool BoardController::IsValidMove(const std::weak_ptr<Card>& card) const
 
 void BoardController::PlayCard(const std::shared_ptr<Card>& card)
 {
+    card->Action();
     DiscardPile->AddCard(card);
 }
 
@@ -68,12 +75,22 @@ std::shared_ptr<Card> BoardController::GetDeckTopCard()
     return Deck->RemoveAt(0);
 }
 
+size_t BoardController::GetDeckAmount() const
+{
+    return Deck->GetAmount();
+}
+
+size_t BoardController::GetDiscardPileAmount() const
+{
+    return DiscardPile->GetAmount();
+}
+
 void BoardController::CreateCards()
 {
     Deck = std::make_shared<CardCollection>();
     DiscardPile = std::make_shared<CardCollection>();
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i <= GameConstants::CARDS_NUMBER_MAX; ++i)
     {
         CreateNumberCard(i, Blue, 2);
         CreateNumberCard(i, Red, 2);
@@ -92,7 +109,7 @@ void BoardController::CreateNumberCard(int number, ColorType color, const int am
 {
     for (int i = 0; i < amount; ++i)
     {
-        const std::shared_ptr<Card> card = std::static_pointer_cast<Card>(std::make_shared<NumberCard>(color, number));
+        const std::shared_ptr<Card> card = std::static_pointer_cast<Card>(std::make_shared<NumberCard>(color, number, CardEffectHandler));
         Deck->AddCard(card);   
     }
 }
@@ -101,9 +118,9 @@ void BoardController::CreateEffectCards(ColorType color) const
 {
     for (int i = 0; i < 2; ++i)
     {
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ForceBuyCard>(color, 2)));
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ReverseCard>(color)));
-        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<JumpCard>(color)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ForceBuyCard>(color, 2, CardEffectHandler)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<ReverseCard>(color, CardEffectHandler)));
+        Deck->AddCard(std::static_pointer_cast<Card>(std::make_shared<JumpCard>(color, CardEffectHandler)));
     }
 }
 
@@ -120,4 +137,16 @@ void BoardController::DistributeCards(const std::shared_ptr<std::vector<Player>>
 
 void BoardController::ResetDeck()
 {
+    std::shared_ptr<Card> topCard = DiscardPile->RemoveAtTop();
+    std::vector<std::shared_ptr<Card>> discardPile = DiscardPile->GetCards(); 
+    std::vector<std::shared_ptr<Card>> deck = Deck->GetCards();
+    deck.insert(
+      deck.end(),
+      std::make_move_iterator(discardPile.begin()),
+      std::make_move_iterator(discardPile.end())
+    );
+    Deck->SetCards(std::move(deck));
+    
+    DiscardPile->ClearCards();
+    DiscardPile->AddCard(topCard);
 }

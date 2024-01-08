@@ -134,7 +134,6 @@
     <ClCompile Include="BoardController.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardCollection.cpp" />
-    <ClCompile Include="ColorType.cpp" />
     <ClCompile Include="ForceBuyCard.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="JumpCard.cpp" />
@@ -152,6 +151,7 @@
     <ClInclude Include="ForceBuyCard.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="ICardEffectHandler.h" />
     <ClInclude Include="JumpCard.h" />
     <ClInclude Include="ConsoleIO.h" />
     <ClInclude Include="NumberCard.h" />

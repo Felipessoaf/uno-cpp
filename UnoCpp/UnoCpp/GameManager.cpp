@@ -14,8 +14,8 @@ void GameManager::Setup()
 {
     Board = std::make_shared<BoardController>();
     CreatePlayers();
-    Board->Setup(Players);
-
+    Board->Setup(Players, std::shared_ptr<ICardEffectHandler>(this));
+    
     StartGame();
 }
 
@@ -54,10 +54,10 @@ void GameManager::StartCurrentPlayerTurn()
     PrintRoundInfo();
 
     Player& currentPlayer = Players->at(currentPlayerIndex);
-    if (!currentPlayer.PlayTurn())
+    if (!currentPlayer.PlayTurn(amountOfCardsToBuy > 0))
     {
-        //TODO: check if there's an effect (+2/4/6), if not, buy card
-        currentPlayer.BuyCard(1);
+        currentPlayer.BuyCard(amountOfCardsToBuy > 0 ? amountOfCardsToBuy : 1);
+        amountOfCardsToBuy = 0;
     }
     else
     {
@@ -80,7 +80,7 @@ void GameManager::StartCurrentPlayerTurn()
 
 void GameManager::PrintRoundInfo() const
 {
-    system("cls");
+    ConsoleIO::Clear();
 
     ConsoleIO::LogMessage("Order:\n");
     for (int i = 0; i < Players->size(); i++)
@@ -92,6 +92,8 @@ void GameManager::PrintRoundInfo() const
     }
     
     ConsoleIO::LogMessage("\n");
+    ConsoleIO::LogMessage("Deck size: " + std::to_string(Board->GetDeckAmount()) + "\n");
+    ConsoleIO::LogMessage("Pile size: " + std::to_string(Board->GetDiscardPileAmount()) + "\n");
     
 #ifndef _DEBUG
     Players->at(currentPlayer).Print();
@@ -102,11 +104,31 @@ void GameManager::PrintRoundInfo() const
 
 void GameManager::SetNextPlayer()
 {
-    currentPlayerIndex++;
-    if(currentPlayerIndex >= playerAmount)
+    const int maxIndex = playerAmount - 1;
+    currentPlayerIndex += amountOfPlayersToSkip * direction;
+    currentPlayerIndex %= maxIndex + 1;
+    
+    if (currentPlayerIndex < 0)
     {
-        currentPlayerIndex = 0;
+        currentPlayerIndex = maxIndex + 1 + currentPlayerIndex;
     }
+    
+    amountOfPlayersToSkip = 1;
+}
+
+void GameManager::AddSkipPlayerAmount(int skipAmount)
+{
+    amountOfPlayersToSkip += skipAmount;
+}
+
+void GameManager::AddBuyCardsAmount(int buyAmount)
+{
+    amountOfCardsToBuy += buyAmount;
+}
+
+void GameManager::ToggleDirection()
+{
+    direction *= -1;
 }
 
 void GameManager::EndGame() const

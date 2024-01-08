@@ -13,7 +13,7 @@ public:
     std::string Name;
     CardCollection Cards;
 
-    [[nodiscard]] bool PlayTurn();
+    [[nodiscard]] bool PlayTurn(bool isForceBuyInEffect);
     void Print() const;
     void BuyCard(int amount);
     bool HasShoutedUno() const;
